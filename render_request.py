@@ -1,7 +1,7 @@
 import requests
 
 # Replace this with your actual deployed Render URL
-url = "https://your-app-name.onrender.com/predict/"
+url = "https://deploying-ml-model-to-render-with-fastapi.onrender.com/predict/"
 
 # Define the input data using hyphenated keys to match the API schema
 input_data = {
