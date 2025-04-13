@@ -44,8 +44,7 @@ for fold, (train_idx, test_idx) in enumerate(skf.split(data, data[label])):
 
     # Process test data
     X_test, y_test, _, _ = process_data(
-        test, categorical_features=cat_features, label=label, training=False, encoder=encoder, lb=lb
-    )
+        test, categorical_features=cat_features, label=label, training=False, encoder=encoder, lb=lb)
 
     # Train model
     model = train_model(X_train, y_train)

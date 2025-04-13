@@ -4,7 +4,7 @@ For additional information see the Model Card paper: [Model Card Paper](https://
 
 ## Model Details
 
-This model is a Logistic Regression classifier, created as part of a machine learning pipeline defined in the starter/starter project structure. The model uses the default hyperparameters from scikit-learn (>= 0.24). It was trained to predict whether an individual's income exceeds $50K based on demographic and employment features from the U.S. Census dataset. The project includes code for preprocessing the data, training, evaluating, and persisting the model.
+This model is a Logistic Regression classifier, created as part of a machine learning pipeline defined in the starter/starter project structure. The model uses the default hyperparameters from scikit-learn (>= 1.6.1). It was trained to predict whether an individual's income exceeds $50K based on demographic and employment features from the U.S. Census dataset. The project includes code for preprocessing the data, training, evaluating, and persisting the model.
 
 ## Intended Use
 
@@ -21,21 +21,21 @@ This model is intended to predict whether an individual's income exceeds $50K or
   - Categorical features were encoded using OneHotEncoder.
   - The label (salary) was encoded using LabelBinarizer.
   - Continuous features were retained as-is.
-- **Train/Test Split**: The dataset was split into 80% for training and 20% for testing using `train_test_split` from scikit-learn. K-Fold Cross Validation may be used for additional robustness.
+- **Train/Test Split**: K-Fold Cross Validation: The dataset was divided into 5 folds for cross-validation using StratifiedKFold from scikit-learn. This method ensures that each fold maintains the same proportion of classes (i.e., the "salary" label) as the original dataset, enhancing the model's ability to generalize. Each fold is used as a validation set once, with the remaining data used for training, allowing for more robust evaluation.
 
 ## Evaluation Data
 
-The evaluation data consists of 20% of the original dataset, which was separated using a train-test split. The test set contains a diverse distribution of demographic and employment features, allowing the model to be evaluated for its ability to generalize to unseen data.
+The model's performance was evaluated using K-Fold Cross Validation with 5 splits. This method ensures that the model is tested on different subsets of the data multiple times, which helps in assessing its ability to generalize across various unseen data distributions. The stratification ensures that each fold contains a balanced distribution of demographic and employment features, providing a thorough evaluation of the model.
 
 ## Metrics
 
-The model was evaluated using the following metrics:
+The model was evaluated using the following metrics, with the **mean value calculated across all K-Fold splits**:
 
-- **Precision**: Measures the proportion of positive predictions that were correct.
-- **Recall**: Measures the proportion of actual positives that were correctly identified by the model.
-- **F1 Score**: The harmonic mean of precision and recall, offering a balance between the two.
+- **Precision**: Measures the proportion of positive predictions that were correct, averaged across all folds.
+- **Recall**: Measures the proportion of actual positives that were correctly identified by the model, averaged across all folds.
+- **F1 Score**: The harmonic mean of precision and recall, offering a balance between the two, calculated as the mean across all folds.
 
-These metrics help to ensure that the model maintains a balance between identifying individuals with high income (positive class) and avoiding false positives or negatives.
+These metrics help ensure that the model maintains a balance between identifying individuals with high income (positive class) and avoiding false positives or negatives. By computing the mean across the K-Fold splits, the evaluation becomes more robust and reliable across different subsets of the data.
 
 ## Ethical Considerations
 
