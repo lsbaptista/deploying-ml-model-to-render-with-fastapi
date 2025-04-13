@@ -27,6 +27,16 @@ This model is intended to predict whether an individual's income exceeds $50K or
 
 The model's performance was evaluated using K-Fold Cross Validation with 5 splits. This method ensures that the model is tested on different subsets of the data multiple times, which helps in assessing its ability to generalize across various unseen data distributions. The stratification ensures that each fold contains a balanced distribution of demographic and employment features, providing a thorough evaluation of the model.
 
+# Cross-Validation Summary
+
+The model's performance across the K-Fold splits is summarized by the following metrics:
+
+- **Average Precision**: 0.7336
+- **Average Recall**: 0.6259
+- **Average F1 Score**: 0.6755
+
+These metrics indicate that the model is fairly good at distinguishing individuals with higher income from those with lower income, but there is still room for improvement, particularly in terms of recall.
+
 ## Metrics
 
 The model was evaluated using the following metrics, with the **mean value calculated across all K-Fold splits**:

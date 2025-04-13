@@ -7,10 +7,7 @@ import pandas as pd
 
 app = FastAPI()
 
-# Load the pre-trained model
 model = joblib.load('model/model.pkl')
-
-# Define a Pydantic model for the POST request body
 
 
 class InputData(BaseModel):
@@ -41,31 +38,46 @@ class InputData(BaseModel):
                 "fnlgt": 234721,
                 "education": "HS-grad",
                 "education-num": 9,
-                "marital-status": "Married-civ-spouse",  # Note the hyphen here
+                "marital-status": "Married-civ-spouse",
                 "occupation": "Tech-support",
                 "relationship": "Husband",
                 "race": "White",
                 "sex": "Male",
-                "capital-gain": 0,  # Hyphenated format
-                "capital-loss": 0,  # Hyphenated format
-                "hours-per-week": 40,  # Hyphenated format
-                "native-country": "United-States"  # Hyphenated format
+                "capital-gain": 0,
+                "capital-loss": 0,
+                "hours-per-week": 40,
+                "native-country": "United-States"
             }
         }
 
 
 @app.get("/")
 def read_root():
+    """
+    Handles the root endpoint of the FastAPI application.
+
+    Returns:
+        dict: A dictionary containing a welcome message for the ML Inference Service.
+    """
     return {"message": "Welcome to the FastAPI ML Inference Service!"}
 
 
-# POST method for model inference
 @app.post("/predict/")
 def predict(data: InputData):
-    # Convert the Pydantic model to a pandas DataFrame
+    """
+    Make a prediction using the input data.
+
+    Args:
+        data (InputData): The input data object containing features required for prediction.
+
+    Returns:
+        dict: A dictionary containing the prediction label.
+
+    This function processes the input data, encodes categorical features using pre-trained encoders,
+    and uses a pre-trained model to make a prediction. The predicted label is then decoded and returned.
+    """
     input_data = pd.DataFrame([data.model_dump(by_alias=True)])
 
-    # Define the categorical features
     cat_features = [
         "workclass",
         "education",
@@ -79,13 +91,10 @@ def predict(data: InputData):
 
     encoder = joblib.load("model/encoder.pkl")
     lb = joblib.load("model/lb.pkl")
-    # Process the data
     X, _, _, _ = process_data(input_data, categorical_features=cat_features,
                               label=None, training=False, encoder=encoder, lb=lb)
 
-    # Make prediction
     prediction = model.predict(X)
     prediction_label = lb.inverse_transform(prediction)[0]
 
-    # Return the prediction
     return {"prediction": prediction_label}

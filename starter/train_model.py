@@ -33,23 +33,18 @@ all_precisions, all_recalls, all_fbetas = [], [], []
 for fold, (train_idx, test_idx) in enumerate(skf.split(data, data[label])):
     print(f"\n--- Fold {fold + 1}/{k_folds} ---")
 
-    # K-Fold train/test sets
     train = data.iloc[train_idx]
     test = data.iloc[test_idx]
 
-    # Process training data
     X_train, y_train, encoder, lb = process_data(
         train, categorical_features=cat_features, label=label, training=True
     )
 
-    # Process test data
     X_test, y_test, _, _ = process_data(
         test, categorical_features=cat_features, label=label, training=False, encoder=encoder, lb=lb)
 
-    # Train model
     model = train_model(X_train, y_train)
 
-    # Evaluate model
     preds = inference(model, X_test)
     precision, recall, fbeta = compute_model_metrics(y_test, preds)
     print(f"Precision: {precision:.4f}, Recall: {recall:.4f}, F1: {fbeta:.4f}")
@@ -58,19 +53,16 @@ for fold, (train_idx, test_idx) in enumerate(skf.split(data, data[label])):
     all_recalls.append(recall)
     all_fbetas.append(fbeta)
 
-# Print average performance across all folds
 print("\n=== Cross-Validation Summary ===")
 print(f"Average Precision: {np.mean(all_precisions):.4f}")
 print(f"Average Recall:    {np.mean(all_recalls):.4f}")
 print(f"Average F1 Score:  {np.mean(all_fbetas):.4f}")
 
-# Final model trained on full data
 X_final, y_final, encoder, lb = process_data(
     data, categorical_features=cat_features, label=label, training=True
 )
 final_model = train_model(X_final, y_final)
 
-# Save model and encoders
 model_dir = os.path.join('model')
 if not os.path.exists(model_dir):
     os.makedirs(model_dir)
