@@ -32,7 +32,7 @@ class InputData(BaseModel):
     class Config:
         def alias_generator(x):
             return x.replace('_', '-')
-        allow_population_by_field_name = True
+        validate_by_name = True
 
         json_schema_extra = {
             "example": {
